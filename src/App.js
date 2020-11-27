@@ -1,23 +1,47 @@
-import logo from './logo.svg';
+import React from 'react'
 import './App.css';
+import {ThemeProvider, createGlobalStyle} from 'styled-components';
+import style from 'styled-theming'
+import useTheme from './useTheme'
+import { Container } from 'react-bootstrap';
 
-function App() {
+const getBackground = style('mode', {
+  light: '#EEE',
+  dark: '#111'
+});
+const getTextColor = style('mode', {
+  light: '#111',
+  dark: '#EEE'
+});
+
+const GlobalStyle = createGlobalStyle`
+body{
+  background-color: ${getBackground};
+  color: ${getTextColor};
+  transition: all 0.5s ease-out;
+}
+`;
+
+
+const App = () => {
+
+  const theme = useTheme();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle/>
+        <Container className="">
+          <h1 className="text-center">Hello</h1>
+          <button className="" onClick={e => theme.setTheme(
+            theme.mode === 'dark'
+            ? {mode: 'light'}
+            : {mode: 'dark'}
+            )}>
+              Toggle 
+          </button>
+        </Container>
+      </ThemeProvider>
     </div>
   );
 }
